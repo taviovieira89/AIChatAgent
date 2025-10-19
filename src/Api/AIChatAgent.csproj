@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>200a8185-7d7f-47f8-8662-4155c1512022</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="13.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0-preview.1.24081.5" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\AIChatAgent.Domain.csproj" />
+    <ProjectReference Include="..\Infrastructure\AIChatAgent.Infrastructure.csproj" />
+    <ProjectReference Include="..\Application\AIChatAgent.Application.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,11 @@
+@AIChatAgent_HostAddress = https://localhost:7200
+
+### Send message to chat
+POST {{AIChatAgent_HostAddress}}/chat
+Content-Type: application/json
+
+"Hello, how are you today?"
+
+### Get weather forecast
+GET {{AIChatAgent_HostAddress}}/weatherforecast/
+Accept: application/json

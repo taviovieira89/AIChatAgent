@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aichatagent-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: aichatagent-api
+  template:
+    metadata:
+      labels:
+        app: aichatagent-api
+    spec:
+      containers:
+      - name: api
+        image: aichatagent-api:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: Production
+        - name: Redis__ConnectionString
+          valueFrom:
+            secretKeyRef:
+              name: aichatagent-secrets
+              key: redis-connection
+        - name: ConnectionStrings__DefaultConnection
+          valueFrom:
+            secretKeyRef:
+              name: aichatagent-secrets
+              key: postgres-connection
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"

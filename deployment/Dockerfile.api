@@ -1,0 +1,22 @@
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+WORKDIR /app
+EXPOSE 80
+
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+WORKDIR /src
+COPY ["src/Api/AIChatAgent.csproj", "Api/"]
+COPY ["src/Application/AIChatAgent.Application.csproj", "Application/"]
+COPY ["src/Domain/AIChatAgent.Domain.csproj", "Domain/"]
+COPY ["src/Infrastructure/AIChatAgent.Infrastructure.csproj", "Infrastructure/"]
+RUN dotnet restore "Api/AIChatAgent.csproj"
+COPY . .
+WORKDIR "/src/Api"
+RUN dotnet build "AIChatAgent.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "AIChatAgent.csproj" -c Release -o /app/publish
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "AIChatAgent.dll"]
