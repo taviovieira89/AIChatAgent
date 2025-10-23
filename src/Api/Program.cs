@@ -43,6 +43,35 @@ else
 
 var app = builder.Build();
 
+// Check for API test command
+if (args.Length > 0 && args[0] == "test-api")
+{
+    if (args.Length < 3)
+    {
+        Console.WriteLine("Usage: test-api <provider> <message>");
+        return 1;
+    }
+
+    var provider = args[1].ToLower();
+    var message = args[2];
+    
+    try
+    {
+        using var scope = app.Services.CreateScope();
+        var chatService = scope.ServiceProvider.GetRequiredService<IChatService>();
+        
+        Console.WriteLine($"Testing {provider} API with message: {message}");
+        var response = await chatService.GetResponseAsync(message);
+        Console.WriteLine($"Response: {response}");
+        return 0;
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error testing API: {ex.Message}");
+        return 1;
+    }
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -57,28 +86,5 @@ app.UseAuthorization(); // Add authorization middleware
 
 app.MapControllers(); // Map controller routes
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
-
-app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+await app.RunAsync();
+return 0;
