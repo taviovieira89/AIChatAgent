@@ -1,0 +1,42 @@
+name: Test APIs
+
+on:
+  workflow_dispatch:  # Permite execução manual
+  push:
+    branches: [ main ]
+    paths:
+      - 'src/**'
+      - '.github/workflows/**'
+
+jobs:
+  test-apis:
+    runs-on: ubuntu-latest
+    environment: Production
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '9.0.x'
+        
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build
+      run: dotnet build --no-restore
+      
+    - name: Test OpenAI API
+      env:
+        CHATPROVIDER: "OpenAI"
+        OPENAI__APIKEY: ${{ secrets.OPENAI_API_KEY }}
+      run: |
+        dotnet run --project src/Api/AIChatAgent.csproj -- test-api openai "Hello from GitHub Actions!"
+        
+    - name: Test Gemini API
+      env:
+        CHATPROVIDER: "Gemini"
+        GEMINI__APIKEY: ${{ secrets.GEMINI_API_KEY }}
+      run: |
+        dotnet run --project src/Api/AIChatAgent.csproj -- test-api gemini "Hello from GitHub Actions!"
