@@ -21,24 +21,41 @@ builder.Services.AddMediatR(cfg => {
     cfg.RegisterServicesFromAssembly(typeof(AIChatAgent.Application.Features.Chat.SendMessage).Assembly);
 });
 
-// Conditional registration of IChatService based on configuration
-var defaultAIProvider = builder.Configuration["AIProvider:Default"] ?? "OpenAI";
+// Get provider from environment variable or fallback to configuration
+var defaultAIProvider = Environment.GetEnvironmentVariable("CHATPROVIDER") 
+    ?? builder.Configuration["AIProvider:Default"] 
+    ?? "OpenAI";
 
+// Configure OpenAI options
+builder.Services.AddOptions<OpenAIServiceOptions>().Configure(options => {
+    options.ApiKey = Environment.GetEnvironmentVariable("OPENAI__APIKEY") 
+        ?? builder.Configuration["AIProvider:OpenAI:ApiKey"] 
+        ?? "";
+    options.DeploymentName = builder.Configuration["AIProvider:OpenAI:DeploymentName"] 
+        ?? "gpt-3.5-turbo";
+});
+
+// Configure Gemini options
+builder.Services.AddOptions<GeminiServiceOptions>().Configure(options => {
+    options.ApiKey = Environment.GetEnvironmentVariable("GEMINI__APIKEY") 
+        ?? builder.Configuration["AIProvider:Gemini:ApiKey"] 
+        ?? "";
+    options.ModelName = builder.Configuration["AIProvider:Gemini:ModelName"] 
+        ?? "gemini-pro";
+});
+
+// Register the appropriate service
 if (defaultAIProvider.Equals("OpenAI", StringComparison.OrdinalIgnoreCase))
 {
     builder.Services.AddScoped<IChatService, OpenAIChatService>();
-    builder.Services.AddOptions<OpenAIServiceOptions>().Configure(options =>
-        builder.Configuration.GetSection("AIProvider:OpenAI").Bind(options));
 }
 else if (defaultAIProvider.Equals("Gemini", StringComparison.OrdinalIgnoreCase))
 {
     builder.Services.AddScoped<IChatService, GeminiChatService>();
-    builder.Services.AddOptions<GeminiServiceOptions>().Configure(options =>
-        builder.Configuration.GetSection("AIProvider:Gemini").Bind(options));
 }
 else
 {
-    throw new InvalidOperationException($"Invalid AIProvider:Default specified in configuration: {defaultAIProvider}");
+    throw new InvalidOperationException($"Invalid CHATPROVIDER specified: {defaultAIProvider}. Must be 'OpenAI' or 'Gemini'.");
 }
 
 var app = builder.Build();

@@ -29,14 +29,18 @@ jobs:
       
     - name: Test OpenAI API
       env:
-        CHATPROVIDER: "OpenAI"
+        CHATPROVIDER: OpenAI
         OPENAI__APIKEY: ${{ secrets.OPENAI_API_KEY }}
+        ASPNETCORE_ENVIRONMENT: Production
       run: |
+        echo "Testing OpenAI API..."
         dotnet run --project src/Api/AIChatAgent.csproj -- test-api openai "Hello from GitHub Actions!"
         
     - name: Test Gemini API
       env:
-        CHATPROVIDER: "Gemini"
+        CHATPROVIDER: Gemini
         GEMINI__APIKEY: ${{ secrets.GEMINI_API_KEY }}
+        ASPNETCORE_ENVIRONMENT: Production
       run: |
+        echo "Testing Gemini API..."
         dotnet run --project src/Api/AIChatAgent.csproj -- test-api gemini "Hello from GitHub Actions!"
