@@ -1,0 +1,45 @@
+name: API Test Manual
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-apis:
+    runs-on: ubuntu-latest
+    environment: Production
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '9.0.x'
+        
+    - name: Restore dependencies
+      run: |
+        echo "Restoring dependencies..."
+        dotnet restore
+      
+    - name: Build
+      run: |
+        echo "Building project..."
+        dotnet build --no-restore
+      
+    - name: Test OpenAI API
+      env:
+        CHATPROVIDER: OpenAI
+        OPENAI__APIKEY: ${{ secrets.OPENAI_API_KEY }}
+        ASPNETCORE_ENVIRONMENT: Production
+      run: |
+        echo "Testing OpenAI API..."
+        dotnet run --project src/Api/AIChatAgent.csproj -- test-api openai "What is the current time?"
+        
+    - name: Test Gemini API
+      env:
+        CHATPROVIDER: Gemini
+        GEMINI__APIKEY: ${{ secrets.GEMINI_API_KEY }}
+        ASPNETCORE_ENVIRONMENT: Production
+      run: |
+        echo "Testing Gemini API..."
+        dotnet run --project src/Api/AIChatAgent.csproj -- test-api gemini "What is the current time?"
