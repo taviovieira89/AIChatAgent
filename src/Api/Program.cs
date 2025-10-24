@@ -41,7 +41,7 @@ builder.Services.AddOptions<GeminiServiceOptions>().Configure(options => {
         ?? builder.Configuration["AIProvider:Gemini:ApiKey"] 
         ?? "";
     options.ModelName = builder.Configuration["AIProvider:Gemini:ModelName"] 
-        ?? "gemini-pro";
+        ?? "gemini-2.5-flash";
 });
 
 // Register the appropriate service

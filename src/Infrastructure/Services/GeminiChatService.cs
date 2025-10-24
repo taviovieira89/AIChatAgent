@@ -42,8 +42,9 @@ namespace AIChatAgent.Infrastructure.Services
             _logger.LogInformation("Received message for Gemini: {Message}", message);
             try
             {
-                var version = "v1beta";
-                var requestUri = $"/{version}/models/{_options.ModelName}:generateContent?key={_options.ApiKey}";
+                // Use a more recent API surface - adjust if your Google project exposes a different version
+                var version = "v1beta2";
+                var requestUri = $"/{version}/models/{_options.ModelName}:generateText?key={_options.ApiKey}";
 
                 var request = new
                 {
@@ -66,16 +67,32 @@ namespace AIChatAgent.Infrastructure.Services
                 var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
                 var response = await _httpClient.PostAsync(requestUri, content, cancellationToken);
-                response.EnsureSuccessStatusCode();
 
+                // Read body first so we can log details on non-success responses
                 var jsonResponse = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogError("Gemini API returned {StatusCode}. Body: {Body}", response.StatusCode, jsonResponse);
+                    throw new HttpRequestException($"Gemini API returned {response.StatusCode}: {jsonResponse}");
+                }
+
                 var responseObj = JsonSerializer.Deserialize<JsonElement>(jsonResponse);
-                var generatedText = responseObj
-                    .GetProperty("candidates")[0]
-                    .GetProperty("content")
-                    .GetProperty("parts")[0]
-                    .GetProperty("text")
-                    .GetString() ?? "No response generated";
+
+                // Defensive parsing - check properties existence
+                string generatedText = "No response generated";
+                if (responseObj.ValueKind == JsonValueKind.Object && responseObj.TryGetProperty("candidates", out var candidates) && candidates.GetArrayLength() > 0)
+                {
+                    var first = candidates[0];
+                    if (first.TryGetProperty("content", out var contentProp) && contentProp.TryGetProperty("parts", out var parts) && parts.GetArrayLength() > 0)
+                    {
+                        var part = parts[0];
+                        if (part.TryGetProperty("text", out var textProp))
+                        {
+                            generatedText = textProp.GetString() ?? generatedText;
+                        }
+                    }
+                }
 
                 _logger.LogInformation("Gemini API call successful. Response: {ResponseContent}", generatedText);
                 return generatedText;

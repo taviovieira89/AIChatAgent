@@ -37,7 +37,7 @@ A modern chat agent implementation using .NET 9, supporting multiple AI provider
   },
   "Gemini": {
     "ApiKey": "seu-gemini-api-key-aqui",
-    "ModelName": "gemini-pro"
+    "ModelName": "gemini-2.5-flash"
   }
 }
 ```
@@ -55,7 +55,7 @@ OPENAI__MODELNAME=gpt-3.5-turbo
 
 # Gemini
 GEMINI__APIKEY=sua-chave-aqui
-GEMINI__MODELNAME=gemini-pro
+GEMINI__MODELNAME=gemini-2.5-flash
 
 # Provider
 CHATPROVIDER=Gemini  # ou OpenAI

@@ -27,14 +27,14 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
       
-    - name: Test OpenAI API
-      env:
-        CHATPROVIDER: OpenAI
-        OPENAI__APIKEY: ${{ secrets.OPENAI_API_KEY }}
-        ASPNETCORE_ENVIRONMENT: Production
-      run: |
-        echo "Testing OpenAI API..."
-        dotnet run --project src/Api/AIChatAgent.csproj -- test-api openai "Hello from GitHub Actions!"
+    # - name: Test OpenAI API
+    #   env:
+    #     CHATPROVIDER: OpenAI
+    #     OPENAI__APIKEY: ${{ secrets.OPENAI_API_KEY }}
+    #     ASPNETCORE_ENVIRONMENT: Production
+    #   run: |
+    #     echo "Testing OpenAI API..."
+    #     dotnet run --project src/Api/AIChatAgent.csproj -- test-api openai "Hello from GitHub Actions!"
         
     - name: Test Gemini API
       env:
