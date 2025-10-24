@@ -26,14 +26,6 @@ jobs:
         echo "Building project..."
         dotnet build --no-restore
       
-    - name: Test OpenAI API
-      env:
-        CHATPROVIDER: OpenAI
-        OPENAI__APIKEY: ${{ secrets.OPENAI_API_KEY }}
-        ASPNETCORE_ENVIRONMENT: Production
-      run: |
-        echo "Testing OpenAI API..."
-        dotnet run --project src/Api/AIChatAgent.csproj -- test-api openai "What is the current time?"
         
     - name: Test Gemini API
       env:
