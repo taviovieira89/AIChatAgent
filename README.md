@@ -2,6 +2,53 @@
 
 A modern chat agent implementation using .NET 9, supporting multiple AI providers (OpenAI and Google Gemini) with Clean Architecture principles.
 
+## 🆕 Recent Improvements
+
+- Enhanced Gemini API Integration:
+  - Improved error handling with detailed API response logging
+  - Updated request payload format for better compatibility
+  - Added defensive JSON parsing for API responses
+  - Implemented proper model name configuration
+- CI/CD Enhancements:
+  - Added automated API testing workflow
+  - Configured GitHub Actions for Gemini API validation
+  - Improved environment secret management
+
+## 🗺 Future Roadmap
+
+### Phase 1: Core Enhancements
+- [ ] Implement conversation history persistence
+- [ ] Add Claude/Anthropic AI provider support
+- [ ] Enable streaming responses for better UX
+- [ ] Add domain-specific prompt templates
+
+### Phase 2: Technical Improvements
+- [ ] Implement response caching system
+- [ ] Add rate limiting and usage controls
+- [ ] Configure circuit breaker pattern
+- [ ] Set up monitoring (Prometheus/Grafana)
+- [ ] Expand test coverage
+
+### Phase 3: User Interface & APIs
+- [ ] Develop React/Angular frontend
+- [ ] Create CLI interface
+- [ ] Implement WebSocket support
+- [ ] Add file processing capabilities
+
+### Phase 4: Infrastructure
+- [ ] Configure staging environment
+- [ ] Implement automatic deployments
+- [ ] Add cost monitoring for AI APIs
+- [ ] Set up Docker/K8s deployment
+- [ ] Configure auto-scaling
+
+### Phase 5: Security & Performance
+- [ ] Implement authentication/authorization
+- [ ] Add per-user rate limiting
+- [ ] Set up audit logging
+- [ ] Add content validation
+- [ ] Implement response caching
+
 ## 🚀 Features
 
 - Clean Architecture implementation
