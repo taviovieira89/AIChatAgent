@@ -7,8 +7,8 @@
     <Version>1.0.0</Version>
     <Authors>taviovieira89</Authors>
     <Company>taviovieira89</Company>
-    <PackageId>AIChatAgent</PackageId>
-    <Product>AIChatAgent</Product>
+    <PackageId>AIChatAgent.Client</PackageId>
+    <Product>AIChatAgent.Client</Product>
     <Description>A modern chat agent supporting multiple AI providers (OpenAI and Google Gemini)</Description>
     <PackageDescription>Easy to use chat agent that supports multiple AI providers. Simply install, configure your API key, and start chatting with AI models from OpenAI or Google Gemini.</PackageDescription>
     <RepositoryUrl>https://github.com/taviovieira89/AIChatAgent</RepositoryUrl>

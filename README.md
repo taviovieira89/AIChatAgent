@@ -6,7 +6,7 @@ A modern chat agent implementation using .NET 9, supporting multiple AI provider
 
 Install the package:
 ```shell
-dotnet add package AIChatAgent
+dotnet add package AIChatAgent.Client
 ```
 
 Use in your code:
