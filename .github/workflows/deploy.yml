@@ -8,6 +8,10 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  packages: write
+  contents: read
+
 env:
   OPENAI__APIKEY: ${{ secrets.OPENAI_API_KEY }}
   GEMINI__APIKEY: ${{ secrets.GEMINI_API_KEY }}
