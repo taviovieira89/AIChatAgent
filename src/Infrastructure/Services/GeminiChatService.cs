@@ -43,8 +43,8 @@ namespace AIChatAgent.Infrastructure.Services
             try
             {
                 // Use a more recent API surface - adjust if your Google project exposes a different version
-                var version = "v1beta2";
-                var requestUri = $"/{version}/models/{_options.ModelName}:generateText?key={_options.ApiKey}";
+                var version = "v1beta";
+                var requestUri = $"/{version}/models/{_options.ModelName}:generateContent?key={_options.ApiKey}";
 
                 var request = new
                 {
@@ -52,13 +52,19 @@ namespace AIChatAgent.Infrastructure.Services
                     {
                         new
                         {
+                            role = "user",
                             parts = new[]
                             {
-                                new
-                                {
-                                    text = message
-                                }
+                                new { text = message }
                             }
+                        }
+                    },
+                    safetySettings = new[]
+                    {
+                        new
+                        {
+                            category = "HARM_CATEGORY_HARASSMENT",
+                            threshold = "BLOCK_NONE"
                         }
                     }
                 };
