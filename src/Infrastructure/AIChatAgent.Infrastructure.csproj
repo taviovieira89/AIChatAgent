@@ -4,7 +4,22 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Version>1.0.0</Version>
+    <Authors>taviovieira89</Authors>
+    <Company>taviovieira89</Company>
+    <PackageId>AIChatAgent</PackageId>
+    <Product>AIChatAgent</Product>
+    <Description>A modern chat agent supporting multiple AI providers (OpenAI and Google Gemini)</Description>
+    <PackageDescription>Easy to use chat agent that supports multiple AI providers. Simply install, configure your API key, and start chatting with AI models from OpenAI or Google Gemini.</PackageDescription>
+    <RepositoryUrl>https://github.com/taviovieira89/AIChatAgent</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>ai;chat;openai;gemini;gpt;machinelearning</PackageTags>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../../README.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Azure.AI.OpenAI" Version="1.0.0-beta.9" />

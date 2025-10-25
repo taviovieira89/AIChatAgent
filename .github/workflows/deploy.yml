@@ -55,9 +55,7 @@ jobs:
 
     - name: Create NuGet Package
       run: |
-        dotnet pack src/Domain/AIChatAgent.Domain.csproj -c Release -o packages
         dotnet pack src/Infrastructure/AIChatAgent.Infrastructure.csproj -c Release -o packages
-        dotnet pack src/Application/AIChatAgent.Application.csproj -c Release -o packages
 
     - name: Publish NuGet Package
       run: |

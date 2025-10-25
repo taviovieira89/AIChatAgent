@@ -2,6 +2,55 @@
 
 A modern chat agent implementation using .NET 9, supporting multiple AI providers (OpenAI and Google Gemini) with Clean Architecture principles.
 
+## 📦 Quick Start
+
+Install the package:
+```shell
+dotnet add package AIChatAgent
+```
+
+Use in your code:
+```csharp
+using AIChatAgent.Infrastructure.Services;
+using Microsoft.Extensions.DependencyInjection;
+
+// Setup in your Startup.cs or Program.cs
+services.Configure<GeminiServiceOptions>(configuration.GetSection("Gemini"));
+// OR
+services.Configure<OpenAIServiceOptions>(configuration.GetSection("OpenAI"));
+
+// Configure the chat provider
+services.AddScoped<IChatService, GeminiChatService>();
+// OR
+services.AddScoped<IChatService, OpenAIChatService>();
+
+// Use in your code
+public class ChatExample
+{
+    private readonly IChatService _chatService;
+
+    public ChatExample(IChatService chatService)
+    {
+        _chatService = chatService;
+    }
+
+    public async Task<string> Chat(string message)
+    {
+        return await _chatService.GetResponseAsync(message);
+    }
+}
+```
+
+Configure in your appsettings.json:
+```json
+{
+  "Gemini": {
+    "ApiKey": "your-api-key-here",
+    "ModelName": "gemini-pro"
+  }
+}
+```
+
 ## 🆕 Recent Improvements
 
 - Enhanced Gemini API Integration:
