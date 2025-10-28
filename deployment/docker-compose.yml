@@ -9,8 +9,11 @@ services:
       - "5000:80"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - Redis__ConnectionString=redis:6379
+      - ConnectionStrings__Redis=redis:6379,password=${REDIS_PASSWORD:-strongpassword}
       - ConnectionStrings__DefaultConnection=Host=postgres;Database=aichatagent;Username=postgres;Password=yourpassword
+      - OPENAI__APIKEY=${OPENAI_API_KEY}
+      - GEMINI__APIKEY=${GEMINI_API_KEY}
+      - CHATPROVIDER=Gemini
     depends_on:
       - redis
       - postgres
@@ -19,6 +22,14 @@ services:
     image: redis:alpine
     ports:
       - "6379:6379"
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-strongpassword}
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   postgres:
     image: postgres:latest
@@ -33,3 +44,4 @@ services:
 
 volumes:
   postgres_data:
+  redis_data:
